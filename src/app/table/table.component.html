@@ -1,0 +1,17 @@
+<table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of userPriducts">
+        <td>{{product.id}}</td>
+        <td>{{product.name}}</td>
+        <td>{{product.price}}</td>
+      </tr>
+    </tbody>
+    <input type="number" min="0" max="{{getMaxPoductsNum()}}" [(ngModel)]="inputNum" />
+    <button type="button" class="btn btn-primary" (click)="getUserPtoducts()">Ok</button>

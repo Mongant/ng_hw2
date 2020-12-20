@@ -4,13 +4,15 @@
         <th scope="col">ID</th>
         <th scope="col">Name</th>
         <th scope="col">Price</th>
+        <th scope="col">Delete</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let product of userPriducts">
+      <tr *ngFor="let product of userPriducts; let i = index">
         <td>{{product.id}}</td>
         <td>{{product.name}}</td>
         <td>{{product.price}}</td>
+        <td><button type="button" class="btn btn-danger" (click)="delete(1)">Delete {{i}}</button></td>
       </tr>
     </tbody>
     <input type="number" min="0" max="{{getMaxPoductsNum()}}" [(ngModel)]="inputNum" />

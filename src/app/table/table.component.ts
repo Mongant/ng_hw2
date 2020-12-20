@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, Output } from '@angular/core';
+import { Component, OnInit, Output } from '@angular/core';
+import { EventEmitter } from 'protractor';
 
 @Component({
   selector: 'app-table',
@@ -18,6 +19,8 @@ export class TableComponent implements OnInit {
                         {id: 9, name: "product 9", price: 900}, 
                         {id: 10, name: "product 10", price: 1000}];
 
+  @Output()
+  public deleteEvent: EventEmitter = new EventEmitter();
   public inputNum: any = "10";
   public userPriducts: object[] =[];
 
@@ -42,5 +45,9 @@ export class TableComponent implements OnInit {
 
   public getMaxPoductsNum(): number {
     return this.products.length;
+  }
+
+  public delete(index: any): void {
+    this.deleteEvent.emit(index);
   }
 }

@@ -9,7 +9,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'ng-hw2';
 
-  public consoleEvent(index: any) {
-    console.log(index);
+  public consoleEvent(index: number): void{
+    console.log("Remove element by indrx:" + index);
   }
 }

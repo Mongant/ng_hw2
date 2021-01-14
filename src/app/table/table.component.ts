@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { DataStorageService } from '../services/data-storage.service';
+import { Product } from '../models/products.model';
 
 @Component({
   selector: 'app-table',
@@ -6,48 +8,65 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./table.component.scss']
 })
 export class TableComponent implements OnInit {
-
-  private products: object[] = [{id: 1, name: "product 1", price: 100}, 
-                        {id: 2, name: "product 2", price: 200}, 
-                        {id: 3, name: "product 3", price: 300}, 
-                        {id: 4, name: "product 4", price: 400}, 
-                        {id: 5, name: "product 5", price: 500}, 
-                        {id: 6, name: "product 6", price: 600}, 
-                        {id: 7, name: "product 7", price: 700}, 
-                        {id: 8, name: "product 8", price: 800}, 
-                        {id: 9, name: "product 9", price: 900}, 
-                        {id: 10, name: "product 10", price: 1000}];
+  
+  public styles = {
+    redCell: "redCell"
+  }
 
   @Output()
   public deleteEvent: EventEmitter<number> = new EventEmitter<number>();
-  public inputNum: any = "10";
-  public userPriducts: object[] =[];
+  public inputNum: string = "10";
+  private userProducts: Product[] = [];
+  public priceFlag: boolean = false;
 
-  constructor() { 
-    this.userPriducts = this.getUserPtoducts();
+  constructor(private dataStorage: DataStorageService) { 
+     
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.dataStorage.getProducts().subscribe((products: Product[]) => this.userProducts = products);
   }
 
-  public getUserPtoducts(): object[] {
+  ngOnChanges() {
+    console.log("TableComponent was changed");
+  }
+
+  public getPtoducts(): Product[] {
     let num: number = Number(this.inputNum);
-    console.log("getUserProducts is on");
-    console.log("numItems:" + this.inputNum);
-    console.log("num:" + num);
-    this.userPriducts = [];
-    for(let i = 0; i < num; i++) {
-      this.userPriducts.push(this.products[i]);
-    }
-    return this.userPriducts;
+    console.log(this.userProducts);
+    this.userProducts.splice(num, 1);
+    console.log("getProducts from table");
+    return this.userProducts;
   }
 
   public getMaxPoductsNum(): number {
-    return this.products.length;
+    return 10;
   }
 
   public delete(index: number): void {
     this.deleteEvent.emit(index);
-    this.userPriducts.splice(index, 1);
+    this.userProducts.splice(index, 1);
+  }
+
+  public checkPrice(price: number): string {
+    let style: string = "";
+    if(price > 500 && this.priceFlag) {
+      style = this.styles.redCell;
+    }
+    return style;
+  }
+
+  public selectedCategory(element: string): void{
+    let selectedCategoryList: Product[] = [];
+    if(element === "all categories") {
+      this.userProducts = this.userProducts;
+      return;
+    }
+    for(let pod of this.userProducts) {
+      if(pod["category"] === element) {
+        selectedCategoryList.push(pod);
+      }
+      this.userProducts = selectedCategoryList;
+    }
   }
 }
